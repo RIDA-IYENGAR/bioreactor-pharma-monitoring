@@ -10,7 +10,7 @@ on an industrial penicillin fermentation process using IndPenSim in MATLAB/Simul
 ## Progress
 - [X] Phase 1: IndPenSim familiarization and first run
 - [X] Phase 2: CPP/CQA identification via multivariate analysis
-- [ ] Phase 3: Soft sensor development using Raman spectroscopy
+- [X] Phase 3: Soft sensor development using Raman spectroscopy
 - [ ] Phase 4: PID control design in Simulink
 
 ## How to Run
@@ -33,3 +33,11 @@ confirming penicillin production is the critical quality attribute requiring con
 3. Substrate mean level — third most critical
 
 **CQA:** Final penicillin concentration (g/L)
+
+**Phase 3 — Soft Sensor (Raman PLS Model):**
+- 10 batches × 1150 timepoints × 2200 wavelengths = 11,500 training samples
+- PLS model with 15 components
+- R² = 0.9998 on held-out test batches (Batches 8–10)
+- RMSEP = 0.1354 g/L (vs concentration range 0–35 g/L)
+- Enables real-time penicillin prediction every 12 minutes
+  vs 4+ hour off-line lab delay
