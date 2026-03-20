@@ -1,7 +1,12 @@
 # Bioreactor Monitoring and Control for Pharmaceutical Production
 
 **MathWorks MATLAB & Simulink Challenge Project**  
-**Student:** [Your Name] | PES University, Biotechnology  
+## Team
+| Name | Role |
+|------|------|
+| Rida Iyengar | Phase 1, 2, 3 — Simulation, Multivariate Analysis, Soft Sensor |
+| Saniha M Shetty | Phase 4 — pH PID Controller |
+| Nandana Biju | Phase 5 — Substrate Feed Control & Integration |
 
 ## Project Overview
 Implementing Quality by Design (QbD) and Process Analytical Technology (PAT) 
@@ -19,13 +24,12 @@ Instructions will be added as the project progresses.
 ## References
 - Goldrick et al. (2014) - IndPenSim simulator development
 - Goldrick et al. (2019) - Monitoring and control of IndPenSim
+
 ## Key Results So Far
 **Phase 1 Finding:** Natural batch-to-batch variation in penicillin yield 
 shows SD = 7.38 g/L (CV = 30%) across 20 batches, with yield ranging from 
 13.67 to 34.45 g/L. Biomass variation is comparatively low (SD = 1.06 g/L), 
 confirming penicillin production is the critical quality attribute requiring control.
-## Key Results So Far
-**Phase 1:** Natural batch variation SD = 7.38 g/L (CV = 30%) across 20 batches.
 
 **Phase 2 CPPs identified (PLS R² = 0.944):**
 1. Substrate variability (SD) — top driver of yield variation
@@ -41,3 +45,6 @@ confirming penicillin production is the critical quality attribute requiring con
 - RMSEP = 0.1354 g/L (vs concentration range 0–35 g/L)
 - Enables real-time penicillin prediction every 12 minutes
   vs 4+ hour off-line lab delay
+
+| Phase 4 | In progress |
+| Phase 5 | In progress |
