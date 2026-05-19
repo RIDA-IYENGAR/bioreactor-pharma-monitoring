@@ -99,7 +99,7 @@ pid_s.Ki = Ki_s;
 pid_s.Kd = Kd_s;
 pid_s.setpoint = S_setpoint;
 
-    function u = substrate_PID_controller(X, Xd, k, h_step, T_end)
+    function u = substrate_PID_controller(X, Xd, k, h_step, T_end, Ctrl_flags_in)
         % Read current substrate
         if k > 1 && isfield(X,'S') && length(X.S.y) >= k
             current_S = X.S.y(k);
@@ -140,7 +140,7 @@ pid_pH.integral=0; pid_pH.prev_error=0;
 pid_pH.Kp=0.5; pid_pH.Ki=0.01; pid_pH.Kd=0.001;
 pid_pH.setpoint=6.5;
 
-    function u = dual_PID_controller(X, Xd, k, h_step, T_end)
+    function u = dual_PID_controller(X, Xd, k, h_step, T_end, Ctrl_flags_in)
         u = fctrl_indpensim(X, Xd, k, h_step, T_end);
 
         % --- Substrate PID ---
