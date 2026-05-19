@@ -190,8 +190,7 @@ function [u, X] = pH_PID_controller(X, Xd, k, h_step, T_end, Ctrl_flags_in)
     u_pid = Kp*error + Ki*integral_error + Kd*derivative;
 
     % Default IndPenSim controls
-    u = fctrl_indpensim(X, Xd, k, h_step, T_end);
-
+    u = fctrl_indpensim(X, Xd, k, h_step, T_end, Ctrl_flags_in);
     % Apply PID correction to base flow
     u.Fb = max(0, min(0.05, u.Fb + u_pid));
     X = [];
