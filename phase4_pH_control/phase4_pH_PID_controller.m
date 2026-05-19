@@ -145,7 +145,7 @@ fprintf('Running PID controlled batch...\n');
 %  It reads current pH and adjusts base flow rate
 % =========================================================
 
-function [u, X] = pH_PID_controller(X, Xd, k, h_step, T_end, Ctrl_flags_in)
+function u = pH_PID_controller(X, Xd, k, h_step, T_end, Ctrl_flags_in)
 
     % Persistent variables retain values between function calls
     persistent integral_error prev_error
@@ -193,7 +193,6 @@ function [u, X] = pH_PID_controller(X, Xd, k, h_step, T_end, Ctrl_flags_in)
     u = fctrl_indpensim(X, Xd, k, h_step, T_end, Ctrl_flags_in);
     % Apply PID correction to base flow
     u.Fb = max(0, min(0.05, u.Fb + u_pid));
-    X = [];
 
 end
 
