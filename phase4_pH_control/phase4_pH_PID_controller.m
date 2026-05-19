@@ -157,7 +157,7 @@ pid_state.h = h;
 pid_state.log_pH = [];
 pid_state.log_Fbase = [];
 
-    function u = pH_PID_controller(X, Xd, k, h_step, T_end)
+    function u = pH_PID_controller(X, Xd, k, h_step, T_end, Ctrl_flags_in)
         % Read current pH from simulation
         if k > 1 && isfield(X,'pH') && length(X.pH.y) >= k
             current_pH = X.pH.y(k);
