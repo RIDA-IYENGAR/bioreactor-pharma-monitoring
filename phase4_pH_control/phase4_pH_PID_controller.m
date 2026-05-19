@@ -145,52 +145,58 @@ fprintf('Running PID controlled batch...\n');
 %  It reads current pH and adjusts base flow rate
 % =========================================================
 
-% PID controller as a nested function
-% Uses persistent variables to maintain state between calls
-pid_state.integral = 0;
-pid_state.prev_error = 0;
-pid_state.Kp = Kp;
-pid_state.Ki = Ki;
-pid_state.Kd = Kd;
-pid_state.setpoint = pH_setpoint;
-pid_state.h = h;
-pid_state.log_pH = [];
-pid_state.log_Fbase = [];
+function [u, X] = pH_PID_controller(X, Xd, k, h_step, T_end, Ctrl_flags_in)
 
-    function [u, X] = pH_PID_controller(X, Xd, k, h_step, T_end, Ctrl_flags_in)
-        % Read current pH from simulation
-        if k > 1 && isfield(X,'pH') && length(X.pH.y) >= k
-            current_pH = X.pH.y(k);
-        else
-            current_pH = pid_state.setpoint;
-        end
+    % Persistent variables retain values between function calls
+    persistent integral_error prev_error
 
-        % Calculate PID error
-        error = pid_state.setpoint - current_pH;
-
-        % Integral (accumulate error over time)
-        pid_state.integral = pid_state.integral + error * h_step;
-
-        % Derivative (rate of change of error)
-        derivative = (error - pid_state.prev_error) / h_step;
-        pid_state.prev_error = error;
-
-        % PID output = base flow rate adjustment
-        u_pid = pid_state.Kp * error + ...
-                pid_state.Ki * pid_state.integral + ...
-                pid_state.Kd * derivative;
-
-        % Get default recipe inputs first
-        u = fctrl_indpensim(X, Xd, k, h_step, T_end);
-
-        % Apply PID correction to base flow rate
-        % Clamp between 0 and 0.05 L/h (physical limits)
-        u.Fb = max(0, min(0.05, u.Fb + u_pid));
-
-        % Log values
-        pid_state.log_pH(end+1)    = current_pH;
-        pid_state.log_Fbase(end+1) = u.Fb;
+    % Initialize persistent variables on first call
+    if isempty(integral_error)
+        integral_error = 0;
     end
+
+    if isempty(prev_error)
+        prev_error = 0;
+    end
+
+    % PID tuning parameters
+    Kp = 0.5;
+    Ki = 0.01;
+    Kd = 0.001;
+
+    % Setpoint
+    pH_setpoint = 6.5;
+
+    % Read current pH
+    if k > 1 && isfield(X,'pH') && length(X.pH.y) >= k
+        current_pH = X.pH.y(k);
+    else
+        current_pH = pH_setpoint;
+    end
+
+    % Calculate error
+    error = pH_setpoint - current_pH;
+
+    % Integral term
+    integral_error = integral_error + error * h_step;
+
+    % Derivative term
+    derivative = (error - prev_error) / h_step;
+
+    % Save error for next iteration
+    prev_error = error;
+
+    % PID equation
+    u_pid = Kp*error + Ki*integral_error + Kd*derivative;
+
+    % Default IndPenSim controls
+    u = fctrl_indpensim(X, Xd, k, h_step, T_end);
+
+    % Apply PID correction to base flow
+    u.Fb = max(0, min(0.05, u.Fb + u_pid));
+    X = [];
+
+end
 
 % Run simulation with PID controller
 Xref_pid = indpensim(@pH_PID_controller, Xinterp, x0, h, T, 2, par, Ctrl_flags);
